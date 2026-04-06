@@ -69,7 +69,7 @@ public class BootjpaexampleApplication {
 		// findById(id)- return Optional Containing your data...
 		
 		// this is old method1....
-		Iterable<User> itr = userRepository.findAll();
+//		Iterable<User> itr = userRepository.findAll();
 //		Iterator<User> iterator = itr.iterator();
 //		while(iterator.hasNext()) {
 //			User user1=iterator.next();
@@ -86,8 +86,16 @@ public class BootjpaexampleApplication {
 //		});
 		
 	 // this is new using leamda method 03....
-		itr.forEach(user1->{System.out.println(user1);});
+//		itr.forEach(user1->{System.out.println(user1);});
+	
+		// deleting the user element...
+//		userRepository.deleteById(103);
+//		System.out.println("deleted");
 		
+		// multiple deleted...
+		Iterable<User> allusers = userRepository.findAll();
+		allusers.forEach(user2->System.out.println(user2));		
+		userRepository.deleteAll(allusers);
 	}
 
 }
