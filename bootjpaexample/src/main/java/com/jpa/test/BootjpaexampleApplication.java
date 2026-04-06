@@ -64,7 +64,16 @@ public class BootjpaexampleApplication {
 		User result = userRepository.save(user);
 		System.out.println(result);
 		
+		// how to get the data...
+		// findById(id)- return Optional Containing your data...
 		
+		// this is old method....
+		Iterable<User> itr = userRepository.findAll();
+		Iterator<User> iterator = itr.iterator();
+		while(iterator.hasNext()) {
+			User user1=iterator.next();
+			System.out.println(user1);
+		}
 		
 	}
 
