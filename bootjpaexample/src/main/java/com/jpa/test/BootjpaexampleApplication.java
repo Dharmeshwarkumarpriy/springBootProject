@@ -3,6 +3,7 @@ package com.jpa.test;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -67,13 +68,25 @@ public class BootjpaexampleApplication {
 		// how to get the data...
 		// findById(id)- return Optional Containing your data...
 		
-		// this is old method....
+		// this is old method1....
 		Iterable<User> itr = userRepository.findAll();
-		Iterator<User> iterator = itr.iterator();
-		while(iterator.hasNext()) {
-			User user1=iterator.next();
-			System.out.println(user1);
-		}
+//		Iterator<User> iterator = itr.iterator();
+//		while(iterator.hasNext()) {
+//			User user1=iterator.next();
+//			System.out.println(user1);
+//		}
+		
+//		// this is new method 02....
+//		itr.forEach(new Consumer<User>() {//
+//			@Override
+//			public void accept(User t) {
+//				// TODO Auto-generated method stub
+//				System.out.println(t);
+//			}
+//		});
+		
+	 // this is new using leamda method 03....
+		itr.forEach(user1->{System.out.println(user1);});
 		
 	}
 
