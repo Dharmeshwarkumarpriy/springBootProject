@@ -59,7 +59,7 @@ public class BootjpaexampleApplication {
 		System.out.println("done");
 
 		// update the user of id 11....
-		Optional<User> byId = userRepository.findById(252);
+		Optional<User> byId = userRepository.findById(402);
 		User userUp = byId.get();
 		userUp.setName("golu");
 
@@ -98,12 +98,20 @@ public class BootjpaexampleApplication {
 		userRepository.deleteById(103);
 		System.out.println("deleted");
 
-		// multiple deleted...
-		Iterable<User> allusers = userRepository.findAll();
-		allusers.forEach(userD -> System.out.println(userD));
-		userRepository.deleteAll(allusers);
+//		// multiple deleted...
+//		Iterable<User> allusers = userRepository.findAll();
+//		allusers.forEach(userD -> System.out.println(userD));
+//		userRepository.deleteAll(allusers);
 		System.out.println("delete result");
 
+		// custom finder methods...
+		List<User> byName = userRepository.findByName("golu");
+		byName.forEach(e->System.out.println(e));
+		
+		List<User> byNameAndCity = userRepository.findByNameAndCity("dharmy", "dehri");
+		byNameAndCity.forEach(e1->System.out.println(e1));		
+		System.out.println("findByName result");
+						
 	}
 
 }
