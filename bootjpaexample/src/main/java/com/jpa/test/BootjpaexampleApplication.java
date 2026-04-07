@@ -112,7 +112,7 @@ public class BootjpaexampleApplication {
 		byNameAndCity.forEach(e1->System.out.println(e1));		
 		System.out.println("findByName result");
 		
-		// 
+		// JPQL AND NATIVE QUERIES...
 		List<User> allUser=userRepository.getAllUser();
 		allUser.forEach(e2->{
 			System.out.println(e2);
