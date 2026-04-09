@@ -49,20 +49,25 @@ public class BookController {
 
 	// new book handler...
 	@PostMapping("/books")
-	public Book addBook(@RequestBody Book book) {		
-		Book b=this.bookService.addBook(book);
+	public Book addBook(@RequestBody Book book) {
+		Book b = this.bookService.addBook(book);
 		System.out.println(book);
 		return b;
 	}
-	
+
 	// delete book handler...
 	@DeleteMapping("/books/{bookId}")
-	public int deleteBook(@PathVariable("bookId") int bookId) {		
+	public int deleteBook(@PathVariable("bookId") int bookId) {
 		this.bookService.deleteBook(bookId);
 		System.out.println(bookId);
 		return bookId;
 	}
-	
-	
-	
+
+	// update book handler...
+	@PutMapping("/books/{bookId}")
+	public Book updateBook(@RequestBody Book book, @PathVariable("bookId") int bookId) {
+		this.bookService.updateBook(book, bookId);
+		return book;
+	}
+
 }
