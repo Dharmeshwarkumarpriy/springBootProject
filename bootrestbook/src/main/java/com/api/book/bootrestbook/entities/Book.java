@@ -1,9 +1,11 @@
 package com.api.book.bootrestbook.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Book {
@@ -12,12 +14,14 @@ public class Book {
 //	public int version;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	private String title;
-	private String author;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	private Author author;
 
-	public Book(String title, String author) {
+	public Book(String title, Author author) {
 		super();
 		this.title = title;
 		this.author = author;
@@ -44,11 +48,11 @@ public class Book {
 		this.title = title;
 	}
 
-	public String getAuthor() {
+	public Author getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(String author) {
+	public void setAuthor(Author author) {
 		this.author = author;
 	}
 
