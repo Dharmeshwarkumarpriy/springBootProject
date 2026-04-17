@@ -42,10 +42,15 @@ public class MyController {
 		
 		List<Integer> list = List.of(12);
 		m.addAttribute("mylist",list);
-		
-		
-		
+				
 		return "condition";
+	}
+	
+	// handler for including fragments...
+	@GetMapping("/service")
+	public String servicesHandler(Model m) {
+		
+		return "service";
 	}
 	
 	
