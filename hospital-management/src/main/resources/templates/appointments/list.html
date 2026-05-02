@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointments List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid mt-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">
+                        <i class="fas fa-calendar-alt text-primary"></i>
+                        Appointments List
+                        <span class="badge bg-primary ms-2" th:text="'Total: ' + ${appointments.size()}"></span>
+                    </h2>
+                    <a href="/appointments/new" class="btn btn-primary btn-lg">
+                        <i class="fas fa-plus"></i> Add New Appointment
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search & Filter -->
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search appointments...">
+                    </div>
+                    <div class="col-md-3">
+                        <select id="statusFilter" class="form-select">
+                            <option value="">All Status</option>
+                            <option value="SCHEDULED">Scheduled</option>
+                            <option value="CONFIRMED">Confirmed</option>
+                            <option value="COMPLETED">Completed</option>
+                            <option value="CANCELLED">Cancelled</option>
+                            <option value="NO_SHOW">No Show</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-outline-primary w-100" onclick="filterTable()">
+                            <i class="fas fa-search"></i> Filter
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Appointments Table -->
+        <div class="card shadow">
+            <div class="card-header bg-light">
+                <h6 class="mb-0"><i class="fas fa-table"></i> Appointments Data</h6>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0" id="appointmentsTable">
+                        <thead class="table-light sticky-top">
+                            <tr>
+                                <th style="width: 60px">#</th>
+                                <th>Patient</th>
+                                <th>Doctor</th>
+                                <th>Date & Time</th>
+                                <th>Status</th>
+                                <th style="width: 120px">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="appointment, iterStat : ${appointments}">
+                                <td th:text="${iterStat.count}">1</td>
+                                <td>
+                                    <div class="fw-bold" th:text="${appointment.patient.name}">Patient Name</div>
+<!--                                     <small class="text-muted" th:text="${appointment.patient.email}">patient@email.com</small> -->
+                                </td>
+                                <td>
+                                    <div class="fw-bold" th:text="${appointment.doctor.name}">Doctor Name</div>
+                                    <small class="text-muted" th:text="${appointment.doctor.specialization}">Specialization</small>
+                                </td>
+                                <td>
+                                    <div class="fw-semibold" th:text="${#temporals.format(appointment.appointmentDate, 'dd/MM/yyyy HH:mm')}">
+                                        01/01/2024 10:00
+                                    </div>
+                                    <small class="text-muted" th:text="${#temporals.format(appointment.appointmentDate, 'EEEE')}">
+                                        Monday
+                                    </small>
+                                </td>
+                                <td>
+                                    <span class="badge" 
+                                          th:classappend="'bg-' + ${appointment.status == 'SCHEDULED' ? 'warning' : 
+                                            appointment.status == 'CONFIRMED' ? 'success' : 
+                                            appointment.status == 'COMPLETED' ? 'primary' : 
+                                            appointment.status == 'CANCELLED' ? 'danger' : 'secondary'}"
+                                          th:text="${appointment.status}">
+                                        SCHEDULED
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a th:href="@{'/appointments/' + ${appointment.id}}" 
+                                           class="btn btn-outline-primary" 
+                                           title="View">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a th:href="@{'/appointments/edit/' + ${appointment.id}}" 
+                                           class="btn btn-outline-success" 
+                                           title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button class="btn btn-outline-danger" 
+                                                onclick="confirmDelete(${appointment.id}, 'Are you sure?')"
+                                                title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            $('#appointmentsTable').DataTable({
+                "pageLength": 25,
+                
+                "responsive": true,
+                "language": {
+                    "search": "Search:",
+                    "lengthMenu": "Show _MENU_ entries"
+                }
+            });
+        });
+
+        function filterTable() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+            const statusValue = document.getElementById('statusFilter').value;
+            
+            const rows = document.querySelectorAll('#appointmentsTable tbody tr');
+            
+            rows.forEach(row => {
+                const patientText = row.cells[1].textContent.toLowerCase();
+                const statusText = row.cells[4].textContent;
+                const dateText = row.cells[3].textContent.toLowerCase();
+                
+                const matchesSearch = patientText.includes(searchValue) || dateText.includes(searchValue);
+                const matchesStatus = !statusValue || statusText === statusValue;
+                
+                if (matchesSearch && matchesStatus) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function confirmDelete(id, message) {
+            if (confirm(message)) {
+                window.location.href = '/appointments/delete/' + id;
+            }
+        }
+
+        // Real-time search
+        document.getElementById('searchInput').addEventListener('keyup', filterTable);
+    </script>
+</body>
+</html>

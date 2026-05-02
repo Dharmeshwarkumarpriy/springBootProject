@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${patient.id != null} ? 'Edit Patient' : 'Add Patient'">Patient Form</title>
+</head>
+<body>
+<div th:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-gradient-primary text-white text-center py-4">
+                    <h3 class="mb-0">
+                        <i class="bi bi-person-plus"></i>
+                        <span th:text="${patient.id != null} ? 'Edit Patient' : 'Add New Patient'"></span>
+                    </h3>
+                </div>
+                <div class="card-body p-5">
+                    <form th:action="@{/patients}" th:object="${patient}" method="post" th:if="${patient.id != null}">
+                        <input type="hidden" th:field="*{id}" />
+                    </form>
+                    
+                    <form th:action="@{/patients}" th:object="${patient}" method="post">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Full Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-lg" th:field="*{name}" required>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label fw-bold">Gender</label>
+                                <select class="form-select form-select-lg" th:field="*{gender}">
+                                    <option value="">Select</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label fw-bold">Age</label>
+                                <input type="number" class="form-control form-control-lg" th:field="*{age}" min="1" max="120">
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Phone <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control form-control-lg" th:field="*{phone}" required>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Address</label>
+                                <textarea class="form-control" rows="2" th:field="*{address}"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Disease/Condition</label>
+                            <input type="text" class="form-control form-control-lg" th:field="*{disease}" 
+                                   placeholder="e.g., Fever, Diabetes, Hypertension">
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a th:href="@{/patients}" class="btn btn-secondary btn-lg me-md-2">Cancel</a>
+                            <button type="submit" class="btn btn-primary btn-lg px-4">
+                                <i class="bi bi-check-circle"></i> Save Patient
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

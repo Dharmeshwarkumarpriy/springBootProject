@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${doctor.id != null} ? 'Edit Doctor' : 'Add New Doctor'">Doctor Form</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .form-title {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-success {
+            background: linear-gradient(45deg, #28a745, #20c997);
+        }
+        .btn-danger {
+            background: linear-gradient(45deg, #dc3545, #c82333);
+        }
+        .required::after {
+            content: " *";
+            color: #dc3545;
+        }
+        .alert {
+            border-radius: 10px;
+        }
+        .icon-edit { color: #28a745; }
+        .icon-add { color: #007bff; }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container">
+        <div class="form-container">
+            <!-- Success/Error Messages -->
+            <div th:if="${successMsg}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <span th:text="${successMsg}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            
+            <div th:if="${errorMsg}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <span th:text="${errorMsg}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            
+            <!-- Dynamic Title -->
+            <h2 class="form-title">
+                <i th:classappend="${doctor.id != null} ? 'bi-person-check-fill icon-edit' : 'bi-person-plus-fill icon-add'" 
+                   class="bi me-2"></i>
+                <span th:text="${doctor.id != null} ? 'Edit Doctor Details' : 'Add New Doctor'"></span>
+            </h2>
+            
+            <!-- Form -->
+            <form th:action="@{/doctors}" th:object="${doctor}" method="POST" id="doctorForm" novalidate>
+                <!-- Hidden ID field for Edit -->
+                <input type="hidden" th:field="*{id}" />
+                
+                <div class="row">
+                    <!-- Name Field -->
+                    <div class="col-md-6 mb-3">
+                        <label for="name" class="form-label required">Full Name</label>
+                        <input type="text" 
+                               th:field="*{name}"
+                               class="form-control" 
+                               id="name"
+                               placeholder="Enter doctor's full name"
+                               th:errorclass="is-invalid"
+                               required>
+                        <div class="invalid-feedback" th:errors="*{name}">Name is required</div>
+                    </div>
+                    
+                    <!-- Specialization Field -->
+                    <div class="col-md-6 mb-3">
+                        <label for="specialization" class="form-label required">Specialization</label>
+                        <input type="text" 
+                               th:field="*{specialization}"
+                               class="form-control" 
+                               id="specialization"
+                               placeholder="e.g., Cardiology, Neurology"
+                               th:errorclass="is-invalid"
+                               required>
+                        <div class="invalid-feedback" th:errors="*{specialization}">Specialization is required</div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <!-- Experience Field -->
+                    <div class="col-md-6 mb-3">
+                        <label for="experience" class="form-label required">Experience (Years)</label>
+                        <input type="number" 
+                               th:field="*{experience}"
+                               class="form-control" 
+                               id="experience"
+                               min="0" 
+                               max="50"
+                               placeholder="0"
+                               th:errorclass="is-invalid"
+                               required>
+                        <div class="invalid-feedback" th:errors="*{experience}">Experience is required</div>
+                    </div>
+                    
+                    <!-- Phone Field -->
+                    <div class="col-md-6 mb-3">
+                        <label for="phone" class="form-label">Phone Number</label>
+                        <input type="tel" 
+                               th:field="*{phone}"
+                               class="form-control" 
+                               id="phone"
+                               placeholder="e.g., +91 9876543210">
+                    </div>
+                </div>
+                
+                <!-- Email Field -->
+                <div class="mb-4">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" 
+                           th:field="*{email}"
+                           class="form-control" 
+                           id="email"
+                           placeholder="doctor@example.com"
+                           th:errorclass="is-invalid">
+                    <div class="invalid-feedback" th:errors="*{email}">Invalid email</div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a th:href="@{/doctors}" class="btn btn-outline-light me-md-2">
+                        <i class="bi bi-arrow-left me-1"></i>Back to List
+                    </a>
+                    <button type="button" class="btn btn-secondary me-md-2" onclick="resetForm()">
+                        <i class="bi bi-arrow-clockwise me-1"></i>Reset
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save me-1"></i>
+                        <span id="submitText" 
+                              th:text="${doctor.id != null} ? 'Update Doctor' : 'Save Doctor'"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Form validation
+        (function() {
+            'use strict';
+            const forms = document.querySelectorAll('#doctorForm');
+            
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+        
+        // Reset form function
+        function resetForm() {
+            if (confirm('Are you sure you want to reset the form?')) {
+                document.getElementById('doctorForm').reset();
+                document.getElementById('doctorForm').classList.remove('was-validated');
+                // Reset submit text based on ID presence
+                const idField = document.querySelector('input[name="id"]');
+                document.getElementById('submitText').textContent = 
+                    idField.value ? 'Update Doctor' : 'Save Doctor';
+            }
+        }
+        
+        // Form submit handler
+        document.getElementById('doctorForm').addEventListener('submit', function(e) {
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const submitText = submitBtn.querySelector('#submitText');
+            
+            submitText.textContent = 'Saving...';
+            submitBtn.disabled = true;
+        });
+        
+        // Auto-format phone number
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 10) {
+                value = value.substring(0, 10);
+            }
+            e.target.value = value;
+        });
+        
+        // Auto-dismiss alerts after 5 seconds
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Billing Management</title>
+</head>
+<body>
+<div th:fragment="content">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="mb-0">💰 Billing Management</h2>
+                <a href="/billings/new" class="btn btn-success btn-lg shadow-sm">
+                    <i class="bi bi-plus-circle"></i> Generate Bill
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Summary Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center bg-primary text-white shadow">
+                <div class="card-body">
+                    <h5 th:text="${totalRevenue}">₹0</h5>
+                    <small>Total Revenue</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center bg-success text-white shadow">
+                <div class="card-body">
+                    <h5 th:text="${billings.?[status=='Paid'].size()}">0</h5>
+                    <small>Paid Bills</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center bg-warning text-white shadow">
+                <div class="card-body">
+                    <h5 th:text="${billings.?[status=='Pending'].size()}">0</h5>
+                    <small>Pending Bills</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center bg-info text-white shadow">
+                <div class="card-body">
+                    <h5 th:text="${billings.size()}">0</h5>
+                    <small>Total Bills</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Bill No</th>
+                            <th>Patient</th>
+                            <th>Total</th>
+                            <th>Paid</th>
+                            <th>Remaining</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="billing : ${billings}">
+                            <td class="fw-bold" th:text="${billing.billNo}"></td>
+                            <td th:text="${billing.patient?.name}"></td>
+                            <td><strong class="text-success">₹<span th:text="${billing.totalAmount}"></span></strong></td>
+                            <td>₹<span th:text="${billing.paidAmount}"></span></td>
+                            <td class="text-danger fw-bold">₹<span th:text="${billing.remainingAmount}"></span></td>
+                            <td th:text="${#temporals.format(billing.billDate, 'dd/MM/yyyy')}"></td>
+                            <td>
+                                <span th:text="${billing.status}"
+                                      th:classappend="${billing.status=='Paid'} ? 'badge bg-success' : 
+                                      ${billing.status=='Pending'} ? 'badge bg-warning text-dark' : 'badge bg-secondary'"></span>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a th:href="@{/billings/edit/{id}(id=${billing.id})}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                    <a th:href="@{/billings/delete/{id}(id=${billing.id})}" class="btn btn-sm btn-outline-danger" 
+                                       onclick="return confirm('Delete this bill?')">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

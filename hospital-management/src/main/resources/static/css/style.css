@@ -1,0 +1,70 @@
+/* Custom Hospital Theme */
+:root {
+    --primary-color: #2c5aa0;
+    --secondary-color: #f8f9fa;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(45deg, var(--primary-color), #4a90e2);
+}
+
+.avatar {
+    font-size: 14px;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0,123,255,.075);
+}
+
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+}
+
+/* new line...... */
+
+/* Hospital Management Custom Styles */
+.card {
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;
+}
+
+.border-start-lg {
+    border-left: 5px solid !important;
+}
+
+.navbar-brand i {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0,123,255,0.05);
+}
+
+/* Responsive fixes */
+@media (max-width: 768px) {
+    .display-5 { font-size: 2rem !important; }
+    .h4 { font-size: 1.5rem !important; }
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Room Management</title>
+</head>
+<body>
+<div th:fragment="content">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h2>🏠 Room Management</h2>
+        </div>
+        <div class="col-md-6 text-end">
+            <span class="badge bg-success fs-5 me-3" th:text="'Available: ' + ${availableRooms}"></span>
+            <a href="/rooms/new" class="btn btn-primary btn-lg">Add Room</a>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div th:each="room : ${rooms}" class="col-xl-4 col-md-6 mb-4">
+            <div class="card h-100 shadow-sm" 
+                 th:classappend="${room.status=='Available'} ? 'border-left-primary' : 
+                 ${room.status=='Occupied'} ? 'border-left-success' : 'border-left-danger'">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title mb-1" th:text="${room.roomNo}"></h5>
+                        <span th:text="${room.status}"
+                              th:classappend="${room.status=='Available'} ? 'badge bg-success' : 
+                              ${room.status=='Occupied'} ? 'badge bg-warning text-dark' : 'badge bg-danger'"></span>
+                    </div>
+                    <p class="card-text">
+                        <strong>Type:</strong> <span th:text="${room.type}"></span><br>
+                        <strong>Capacity:</strong> <span th:text="${room.capacity}"></span><br>
+                        <strong>Occupied:</strong> <span th:text="${room.occupied}"></span><br>
+                        <strong>Price/Day:</strong> ₹<span th:text="${room.pricePerDay}"></span>
+                    </p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="btn-group w-100">
+                        <a th:href="@{/rooms/edit/{id}(id=${room.id})}" class="btn btn-sm btn-outline-primary">Edit</a>
+                        <a th:href="@{/rooms/delete/{id}(id=${room.id})}" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

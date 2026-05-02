@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${appointment.id != null} ? 'Edit Appointment' : 'Book New Appointment'">Appointment Form</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        .form-container {
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+        }
+        .form-title {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #ff6b6b;
+            box-shadow: 0 0 0 0.2rem rgba(255, 107, 107, 0.25);
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+        .required::after {
+            content: " *";
+            color: #dc3545;
+        }
+        .alert {
+            border-radius: 10px;
+        }
+        .icon-edit { color: #28a745; }
+        .icon-add { color: #ff6b6b; }
+        .datetime-picker {
+            background: #fff;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container">
+        <div class="form-container">
+            <!-- Success/Error Messages -->
+            <div th:if="${successMsg}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <span th:text="${successMsg}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            
+            <div th:if="${errorMsg}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <span th:text="${errorMsg}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            
+            <!-- Dynamic Title -->
+            <h2 class="form-title">
+                <i th:classappend="${appointment.id != null} ? 'bi-calendar-check-fill icon-edit' : 'bi-calendar-plus-fill icon-add'" 
+                   class="bi me-2"></i>
+                <span th:text="${appointment.id != null} ? 'Edit Appointment' : 'Book New Appointment'"></span>
+            </h2>
+            
+            <!-- Form -->
+            <form th:action="@{/appointments}" th:object="${appointment}" method="POST" id="appointmentForm" novalidate>
+                <!-- Hidden ID field for Edit -->
+                <input type="hidden" th:field="*{id}" />
+                
+                <div class="row">
+                    <!-- Patient Selection -->
+                    <div class="col-md-6 mb-3">
+                        <label for="patient" class="form-label required">Patient</label>
+                        <select class="form-select" id="patient" th:field="*{patient.id}" required>
+                            <option value="">Select Patient</option>
+                            <option th:each="p : ${patients}"
+                                    th:value="${p.id}"
+                                    th:text="${p.name + ' (' + p.phone + ')'}"
+                                    th:selected="${appointment.patient != null and appointment.patient.id == p.id}"></option>
+                        </select>
+                        <div class="invalid-feedback">Please select a patient</div>
+                    </div>
+                    
+                    <!-- Doctor Selection -->
+                    <div class="col-md-6 mb-3">
+                        <label for="doctor" class="form-label required">Doctor</label>
+                        <select class="form-select" id="doctor" th:field="*{doctor.id}" required>
+                            <option value="">Select Doctor</option>
+                            <option th:each="d : ${doctors}"
+                                    th:value="${d.id}"
+                                    th:text="${d.name + ' - ' + d.specialization}"
+                                    th:selected="${appointment.doctor != null and appointment.doctor.id == d.id}"></option>
+                        </select>
+                        <div class="invalid-feedback">Please select a doctor</div>
+                    </div>
+                </div>
+                
+                <!-- Appointment Date & Time -->
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <label for="appointmentDate" class="form-label required">Appointment Date & Time</label>
+                        <input type="datetime-local" 
+                               th:field="*{appointmentDate}"
+                               class="form-control datetime-picker" 
+                               id="appointmentDate"
+                               th:errorclass="is-invalid"
+                               required>
+                        <div class="invalid-feedback" th:errors="*{appointmentDate}">Appointment date is required</div>
+                        <div class="form-text">Select date and time for appointment</div>
+                    </div>
+                    
+                    <!-- Status -->
+                    <div class="col-md-4 mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-select" id="status" th:field="*{status}">
+                            <option value="">Select Status</option>
+                            <option value="SCHEDULED">Scheduled</option>
+                            <option value="CONFIRMED">Confirmed</option>
+                            <option value="COMPLETED">Completed</option>
+                            <option value="CANCELLED">Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a th:href="@{/appointments}" class="btn btn-outline-light me-md-2">
+                        <i class="bi bi-arrow-left me-1"></i>Back to List
+                    </a>
+                    <button type="button" class="btn btn-secondary me-md-2" onclick="resetForm()">
+                        <i class="bi bi-arrow-clockwise me-1"></i>Reset
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save me-1"></i>
+                        <span id="submitText" 
+                              th:text="${appointment.id != null} ? 'Update Appointment' : 'Book Appointment'"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Form validation
+        (function() {
+            'use strict';
+            const forms = document.querySelectorAll('#appointmentForm');
+            
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+        
+        // Reset form function
+        function resetForm() {
+            if (confirm('Are you sure you want to reset the form?')) {
+                document.getElementById('appointmentForm').reset();
+                document.getElementById('appointmentForm').classList.remove('was-validated');
+                const idField = document.querySelector('input[name="id"]');
+                document.getElementById('submitText').textContent = 
+                    idField.value ? 'Update Appointment' : 'Book Appointment';
+            }
+        }
+        
+        // Form submit handler
+        document.getElementById('appointmentForm').addEventListener('submit', function(e) {
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const submitText = submitBtn.querySelector('#submitText');
+            
+            submitText.textContent = 'Saving...';
+            submitBtn.disabled = true;
+        });
+        
+        // Set minimum date to today
+        document.getElementById('appointmentDate').min = new Date().toISOString().slice(0, 16);
+        
+        // Auto-dismiss alerts after 5 seconds
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
+</body>
+</html>

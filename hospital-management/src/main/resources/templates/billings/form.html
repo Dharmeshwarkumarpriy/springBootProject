@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Generate Bill</title>
+</head>
+<body>
+<div th:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-xl-8 col-lg-10">
+            <div class="card shadow-lg border-0 rounded-3">
+                <div class="card-header bg-gradient-primary text-white py-4 text-center">
+                    <i class="bi bi-receipt fs-1 mb-2"></i>
+                    <h3 class="mb-0 fw-bold">Generate New Bill</h3>
+                    <small class="opacity-75">Create billing for patient</small>
+                </div>
+                <div class="card-body p-5">
+                    <form th:action="@{/billings}" th:object="${billing}" method="post">
+                        <input type="hidden" th:field="*{id}" />
+                        
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold fs-6">Patient <span class="text-danger">*</span></label>
+                                <select class="form-select form-select-lg" th:field="*{patient.id}" required>
+                                    <option value="">Select Patient</option>
+                                    <option th:each="p : ${patients}" 
+                                            th:value="${p.id}" 
+                                            th:text="${p.name + ' (' + p.phone + ')'}"></option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold fs-6">Bill No</label>
+                                <input type="text" class="form-control form-control-lg" 
+                                       th:field="*{billNo}" readonly 
+                                       th:value="${billing.billNo ?: 'Auto-generated'}">
+                            </div>
+                        </div>
+                        
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold fs-6">Total Amount <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">₹</span>
+                                    <input type="number" step="0.01" min="0" 
+                                           class="form-control form-control-lg" 
+                                           th:field="*{totalAmount}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold fs-6">Paid Amount</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">₹</span>
+                                    <input type="number" step="0.01" min="0" 
+                                           class="form-control form-control-lg" 
+                                           th:field="*{paidAmount}" value="0">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary btn-lg w-100">
+                                    <i class="bi bi-check-circle me-2"></i>Generate Bill
+                                </button>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="/billings" class="btn btn-outline-secondary btn-lg w-100">
+                                    <i class="bi bi-arrow-left me-2"></i>Cancel
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
