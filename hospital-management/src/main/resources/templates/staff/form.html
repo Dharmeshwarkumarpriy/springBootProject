@@ -1,12 +1,103 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Hospital Management System</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --sidebar-width: 250px;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fc; }
+        .sidebar { background: linear-gradient(180deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .navbar-brand { font-weight: 700; font-size: 1.5rem; }
+        .nav-link { color: rgba(255,255,255,0.8) !important; }
+        .nav-link:hover, .nav-link.active { color: white !important; }
+        .card { box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.15); border: none; }
+        .btn-primary { background: var(--primary-color); border-color: var(--primary-color); }
+        .badge { font-size: 0.75em; }
+        .table th { border-top: none; font-weight: 600; }
+        @media (max-width: 768px) { .sidebar { margin-left: -250px; } }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="d-flex">
+        <div class="sidebar d-flex flex-column p-3 text-white" style="width: var(--sidebar-width);">
+            <a class="navbar-brand text-white mb-4" href="/dashboard">
+                <i class="fas fa-hospital me-2"></i>HMS
+            </a>
+            <nav class="nav nav-pills flex-column">
+                <a class="nav-link mb-2 active" href="/">
+                    <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                </a>
+                <a class="nav-link mb-2" href="/doctors">
+                    <i class="fas fa-user-md me-2"></i>Doctors
+                </a>
+                <a class="nav-link mb-2" href="/patients">
+                    <i class="fas fa-user-injured me-2"></i>Patients
+                </a>
+                <a class="nav-link mb-2" href="/appointments">
+                    <i class="fas fa-calendar-check me-2"></i>Appointments
+                </a>
+                <a class="nav-link mb-2" href="/billings">
+                    <i class="fas fa-receipt me-2"></i>Billing
+                </a>
+                <a class="nav-link mb-2" href="/medicines/new">
+                    <i class="fas fa-pills me-2"></i>Medicines
+                </a>
+                <a class="nav-link mb-2" href="/rooms">
+                    <i class="fas fa-bed me-2"></i>Rooms
+                </a>
+                <a class="nav-link mb-2" href="/staff">
+                    <i class="fas fa-users me-2"></i>Staff
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-grow-1 p-4">
+            <!-- Top Navbar -->
+            <nav class="navbar navbar-expand navbar-light bg-white shadow-sm mb-4 rounded">
+                <div class="container-fluid">
+               <h1 class="display-5 fw-bold mb-1 text-dark">Hospital Management System</h1>
+                   
+                    <button class="navbar-toggler" type="button">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-nav ms-auto">
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle fa-2x text-gray-900 me-2"></i>
+                                <span>Admin</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Page Content -->
+      <div>
+      
 <head>
     <title>Add Staff</title>
 </head>
 <body>
 <div th:fragment="content">
     <div class="row justify-content-center">
-        <div class="col-lg-8">
+        <div >
             <div class="card shadow">
                 <div class="card-header">
                     <h4><i class="bi bi-person-gear"></i> Add Staff Member</h4>
@@ -60,5 +151,17 @@
         </div>
     </div>
 </div>
+</body>
+      
+      </div>
+      
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 </body>
 </html>
