@@ -59,7 +59,7 @@ public class HomeController {
 	
 //	handler for registering user...
 	@RequestMapping(value = "/do_register",method = RequestMethod.POST)
-	public String registerUser(@Valid @ModelAttribute("user") User user, BindingResult result1, @RequestParam(value = "argeement",defaultValue = "false") boolean agreement,Model model, HttpSession session) {
+	public String registerUser(@Valid @ModelAttribute("user") User user, BindingResult result1, @RequestParam(value = "agreement",defaultValue = "false") boolean agreement,Model model, HttpSession session) {
 		
 		try {
 			if(!agreement) {
