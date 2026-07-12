@@ -22,7 +22,8 @@ public class CustomUserDetails implements UserDetails{
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		
-		SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(user.getRole());
+		SimpleGrantedAuthority simpleGrantedAuthority =
+				new SimpleGrantedAuthority(user.getRole());
 				
 		return List.of(simpleGrantedAuthority);
 	}
@@ -36,5 +37,29 @@ public class CustomUserDetails implements UserDetails{
 	public String getUsername() {
 		return user.getEmail();
 	}
-		
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return UserDetails.super.isAccountNonExpired();
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return UserDetails.super.isAccountNonLocked();
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return UserDetails.super.isCredentialsNonExpired();
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return UserDetails.super.isEnabled();
+	}
+				
 }
