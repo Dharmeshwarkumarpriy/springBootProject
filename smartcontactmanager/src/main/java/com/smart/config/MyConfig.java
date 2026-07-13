@@ -29,7 +29,7 @@ public class MyConfig {
                 .anyRequest().permitAll()
             )
             .formLogin(form -> form
-//                .loginPage("/login")
+                .loginPage("/signin")
                 .usernameParameter("email") 
                 .permitAll()
             )

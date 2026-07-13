@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+th:replace="base::layout(~{::section})">
+<head>
+	<meta charset="UTF-8" />
+	<title>this is login page</title>
+</head>
+<body>
+
+	<section>
+	
+	<div class="container-fluid">
+	<form class="login-form" th:action="@{/signin}" method="post">
+    <div class="row">
+    <div class="col-md-4">
+    </div>
+        <div class="col-md-offset-5 col-md-4">
+            <div class="form-login">
+            <h4>Login</h4>
+            <div th:if="${param.error}" class="alert alert-danger" role="alert">
+					Invalid username and password.
+			</div>
+			
+			<div th:if="${param.logout}" class="alert alert-success" role="alert">
+					You have been logged out.			
+			</div>					
+            
+            <input type="text" id="username" name="email" class="form-control input-sm chat-input" placeholder="Username" required autofocus>
+                   </br>
+            <input type="password" id="password" name="password" class="form-control input-sm chat-input" placeholder="Password" required />
+            </br>
+            <div id="register-link" class="text-right">
+                                <a href="/signup" class="text-info">Register here</a>
+                            </div>
+               <button type="submit" class="btn btn-primary btn-md group-btn">login</button>
+     
+            </div>
+        
+        </div>
+    </div>
+    </form>
+</div>
+	</section>
+	
+</body>
+
+</html>
