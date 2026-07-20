@@ -39,6 +39,6 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./Dockerfile
+        file: smartcontactmanager/Dockerfile
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/smart-contact-manager:latest
